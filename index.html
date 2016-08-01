@@ -52,9 +52,9 @@
       </nav>
       <nav id="sub-nav">
         
-          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="Flux RSS"></a>
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
         
-        <a id="nav-search-btn" class="nav-icon" title="Rechercher"></a>
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
       </nav>
       <div id="search-form-wrap">
         <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://cmlocker.github.io"></form>
@@ -77,29 +77,20 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>#缓存详解</p>
-<blockquote>
+        <h1 id="缓存详解"><a href="#缓存详解" class="headerlink" title="缓存详解"></a>缓存详解</h1><blockquote>
 <p>编写: <a href="https://github.com/cmlocker" target="_blank" rel="external">gubaozhen</a><br>整理: <a href="https://github.com/cmlocker" target="_blank" rel="external">fangjie</a> </p>
 </blockquote>
 <h2 id="缓存的概念"><a href="#缓存的概念" class="headerlink" title="缓存的概念"></a>缓存的概念</h2><p>凡是位于速度相差较大的两种硬件之间，用于协调两者数据传输速度差异<br>的结构，均可称之为缓存（Cache）。<br>因为内存相对于硬盘读写速度更快，内存可以作为硬盘的缓存；同样的，硬盘读写速度远高于网络数据的读写速度，也可以将硬盘作为网络数据的缓存。在内存和硬盘之间，硬盘与网络之间，都存在某种意义上的Cache。<br>表现上，缓存载体与被缓存载体总是相对的，缓存设备成本高于被缓存设备，缓存设备速度高于被缓存设备，缓存设备容量远远小于被缓存设备。<br>缓存可以认为是数据的池子，是存储频繁使用的数据的临时的地方，缓存可以认为是原始数据的子集，它是从原始数据里复制出来的，并且为了能被取回，被加上了标志。</p>
 <p><img src="https://raw.githubusercontent.com/cmlocker/lock/master/1.png" alt=""></p>
-<h2 id="命中与回源的概念："><a href="#命中与回源的概念：" class="headerlink" title="命中与回源的概念："></a>命中与回源的概念：</h2><p>当用户发起一个请求，我们的应用接受这个请求，并且如果是在第一次检查缓存的时候，需要去数据库读取产品信息。如果在缓存中，一个条目通过一个标记被找到了，这个条目就会被使用、我们就叫它缓存命中。<br>如果没有命中缓存，就需要从原始地址获取，这个步骤叫做“回源”。回源的代价是高昂的，只有尽可能减少回源才能更好的发挥缓存的作用，但受限于缓存设备的成本，不能仅仅增加缓<br>存容量，只能在成本和回源率之间寻求一个平衡点。</p>
-<p>##常用的缓存算法</p>
-<ul>
-<li>LFU</li>
-<li>LRU</li>
-<li>ARC</li>
-</ul>
-<p>Cache Miss：<br>但是这里需要注意两点：</p>
-<ol>
+<h3 id="命中与回源的概念："><a href="#命中与回源的概念：" class="headerlink" title="命中与回源的概念："></a>命中与回源的概念：</h3><p>当用户发起一个请求，我们的应用接受这个请求，并且如果是在第一次检查缓存的时候，需要去数据库读取产品信息。如果在缓存中，一个条目通过一个标记被找到了，这个条目就会被使用、我们就叫它缓存命中。<br>如果没有命中缓存，就需要从原始地址获取，这个步骤叫做“回源”。回源的代价是高昂的，只有尽可能减少回源才能更好的发挥缓存的作用，但受限于缓存设备的成本，不能仅仅增加缓<br>存容量，只能在成本和回源率之间寻求一个平衡点。</p>
+<h3 id="Cache-Miss："><a href="#Cache-Miss：" class="headerlink" title="Cache Miss："></a>Cache Miss：</h3><ol>
 <li>如果还有缓存的空间，那么，没有命中的对象会被存储到缓存中来。</li>
 <li>如果缓存满了，而又没有命中缓存，那么就会按照某一种策略，把缓存中的旧对象踢出，而把新的对象加入缓存池。而这些策略统称为替代策略（缓存算法），这些策略会决定到底应该踢出哪些对象。</li>
 </ol>
-<p>存储成本：<br>当没有命中时，我们会从数据库取出数据，然后放入缓存。而把这个数据放入缓存所需要的时间和空间，就是存储成本。</p>
-<p>失效：<br>当存在缓存中的数据需要更新时，就意味着缓存中的这个数据失效了。</p>
-<p>缓存算法：<br>介于缓存只能够有限的使用内存，任何Cache系统都需要一个如何淘汰缓存的方案（缓存淘汰算法，等同于页面置换算法）。我们要根据自己的业务需要来选择使用何种算法来淘汰多余的数据，提高命中率。</p>
-<p>常用的缓存算法<br>篇幅原因只提及较为常用的缓存算法及其变种。</p>
-<h3 id="Least-Frequently-Used（LFU）："><a href="#Least-Frequently-Used（LFU）：" class="headerlink" title="Least Frequently Used（LFU）："></a>Least Frequently Used（LFU）：</h3><p>根据数据的历史访问频率来淘汰数据，其核心思想是“如果数据过去被访问多次，那么将来被访问的频率也更高”。</p>
+<h3 id="存储成本："><a href="#存储成本：" class="headerlink" title="存储成本："></a>存储成本：</h3><p>当没有命中时，我们会从数据库取出数据，然后放入缓存。而把这个数据放入缓存所需要的时间和空间，就是存储成本。</p>
+<h3 id="失效："><a href="#失效：" class="headerlink" title="失效："></a>失效：</h3><p>当存在缓存中的数据需要更新时，就意味着缓存中的这个数据失效了。</p>
+<h3 id="缓存算法："><a href="#缓存算法：" class="headerlink" title="缓存算法："></a>缓存算法：</h3><p>介于缓存只能够有限的使用内存，任何Cache系统都需要一个如何淘汰缓存的方案（缓存淘汰算法，等同于页面置换算法）。我们要根据自己的业务需要来选择使用何种算法来淘汰多余的数据，提高命中率。</p>
+<h2 id="常用的缓存算法"><a href="#常用的缓存算法" class="headerlink" title="常用的缓存算法"></a>常用的缓存算法</h2><h3 id="Least-Frequently-Used（LFU）："><a href="#Least-Frequently-Used（LFU）：" class="headerlink" title="Least Frequently Used（LFU）："></a>Least Frequently Used（LFU）：</h3><p>根据数据的历史访问频率来淘汰数据，其核心思想是“如果数据过去被访问多次，那么将来被访问的频率也更高”。</p>
 <h3 id="Least-Recently-User（LRU）："><a href="#Least-Recently-User（LRU）：" class="headerlink" title="Least Recently User（LRU）："></a>Least Recently User（LRU）：</h3><p>根据数据的历史访问记录来进行淘汰数据，其核心思想是“如果数据最近被访问过，那么将来被访问的几率也更高”。</p>
 <h3 id="Least-Recently-Used-K（LRU-K）："><a href="#Least-Recently-Used-K（LRU-K）：" class="headerlink" title="Least Recently Used K（LRU-K）："></a>Least Recently Used K（LRU-K）：</h3><p>LRU-K中的K代表最近使用的次数，因此LRU可以认为是LRU-1。大多数情况下，LRU算法对热点数据命中率是很高的。 但如果突然大量偶发性的数据访问，会让内存中存放大量冷数据，也即是缓存污染。LRU-K的主要目的是为了解决LRU算法“缓存污染”的问题，其核心思想是将“最近使用过1次”的判断标准扩展为“最近使用过K次”。</p>
 <h3 id="First-in-First-out（FIFO）："><a href="#First-in-First-out（FIFO）：" class="headerlink" title="First in First out（FIFO）："></a>First in First out（FIFO）：</h3><p>最先进入的数据，最先被淘汰。一个很简单的算法。只要使用队列数据结构即可实现。那么FIFO淘汰算法基于的思想是”最近刚访问的，将来访问的可能性比较大”。</p>
@@ -113,7 +104,7 @@
 <li>队列中的数据被访问后，引用计数增加，队列重新排序；</li>
 <li>当需要淘汰数据时，将已经排序的列表最后的数据块删除。</li>
 </ol>
-<p>2.Window-LFU：<br>Windows-LFU是LFU的一个改进版，差别在于Window-LFU并不记录所有数据的访问历史，而只是记录过去一段时间内的访问历史，这就是Window的由来，基于这个原因，传统的LFU又被称为<br>“Perfect-LFU”。<br>与LFU的实现基本相同，差别在于不需要记录所有数据的历史访问数据，而只记录过去一段时间内的访问历史。具体实现如下：</p>
+<h3 id="2-Window-LFU："><a href="#2-Window-LFU：" class="headerlink" title="2.Window-LFU："></a>2.Window-LFU：</h3><p>Windows-LFU是LFU的一个改进版，差别在于Window-LFU并不记录所有数据的访问历史，而只是记录过去一段时间内的访问历史，这就是Window的由来，基于这个原因，传统的LFU又被称为<br>“Perfect-LFU”。<br>与LFU的实现基本相同，差别在于不需要记录所有数据的历史访问数据，而只记录过去一段时间内的访问历史。具体实现如下：</p>
 <p><img src="https://raw.githubusercontent.com/cmlocker/lock/master/3.png" alt=""></p>
 <p>1）记录了过去W个访问记录；<br>2）需要淘汰时，将W个访问记录按照LFU规则排序淘汰</p>
 <p>举例如下：<br>假设历史访问记录长度设为9，缓存大小为3，图中不同颜色代表针对不同数据块的访问，同一颜色代表针对同一数据的多次访问。<br>样例1：黄色访问3次，蓝色和橘色都是两次，橘色更新，因此缓存黄色、橘色、蓝色三个数据块<br>样例2：绿色访问3次，蓝色两次，暗红两次，蓝色更新，因此缓存绿色、蓝色、暗红三个数据块</p>
@@ -162,7 +153,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://cmlocker.github.io/2016/08/01/cache/" data-id="circ4vqvy0000o2vfmx43klyq" class="article-share-link">Partager</a>
+      <a data-url="http://cmlocker.github.io/2016/08/01/cache/" data-id="circ52nn10001puvf19qrw30m" class="article-share-link">Share</a>
       
       
     </footer>
@@ -199,7 +190,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://cmlocker.github.io/2016/07/25/hello-world/" data-id="circ4vqwl0001o2vfetspktlu" class="article-share-link">Partager</a>
+      <a data-url="http://cmlocker.github.io/2016/07/25/hello-world/" data-id="circ52nmw0000puvf9svap7to" class="article-share-link">Share</a>
       
       
     </footer>
@@ -235,7 +226,7 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Articles récents</h3>
+    <h3 class="widget-title">Recent Posts</h3>
     <div class="widget">
       <ul>
         
@@ -260,7 +251,7 @@
   <div class="outer">
     <div id="footer-info" class="inner">
       &copy; 2016 John Doe<br>
-      Propulsé by <a href="http://hexo.io/" target="_blank">Hexo</a>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
     </div>
   </div>
 </footer>
