@@ -5,18 +5,28 @@
   
   <title>CMLocker</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="缓存详解
+  <meta name="description" content="目录 (Table of Contents)
+[TOC]
+缓存详解
 编写: gubaozhen整理: fangjie 
 
-缓存的概念凡是位于速度相差较大的两种硬件之间，用于协调两者数据传输速度差异的结构，均可称之为缓存（Cache）。因为内存相对于硬盘读写速度更快，内存可以作为硬盘的缓存；同样的，硬盘读写速度远高于网络数据的读写速度，也可以将硬盘作为网络数据的缓存。在内存和硬盘之间，硬盘与网络之间，都存在某种意义上的Cache。表现上，缓存载体与被缓存载">
+1. 缓存相关概念缓存
+凡是位于速度相差较大的两种硬件之间，用于协调两者数据传输速度差异的结构，均可称之为缓存（Cache）。
+
+因为内存相对于硬盘读写速度更快，内存可以作为硬盘的缓存；同样的，硬盘读写速度远高于网络数据的读写速度，也可以将硬盘作为网络数据的缓存。在内存和硬盘之">
 <meta property="og:type" content="article">
 <meta property="og:title" content="CMLocker">
 <meta property="og:url" content="http://cmlocker.github.io/2016/08/01/cache/index.html">
 <meta property="og:site_name" content="CMLocker">
-<meta property="og:description" content="缓存详解
+<meta property="og:description" content="目录 (Table of Contents)
+[TOC]
+缓存详解
 编写: gubaozhen整理: fangjie 
 
-缓存的概念凡是位于速度相差较大的两种硬件之间，用于协调两者数据传输速度差异的结构，均可称之为缓存（Cache）。因为内存相对于硬盘读写速度更快，内存可以作为硬盘的缓存；同样的，硬盘读写速度远高于网络数据的读写速度，也可以将硬盘作为网络数据的缓存。在内存和硬盘之间，硬盘与网络之间，都存在某种意义上的Cache。表现上，缓存载体与被缓存载">
+1. 缓存相关概念缓存
+凡是位于速度相差较大的两种硬件之间，用于协调两者数据传输速度差异的结构，均可称之为缓存（Cache）。
+
+因为内存相对于硬盘读写速度更快，内存可以作为硬盘的缓存；同样的，硬盘读写速度远高于网络数据的读写速度，也可以将硬盘作为网络数据的缓存。在内存和硬盘之">
 <meta property="og:image" content="https://raw.githubusercontent.com/cmlocker/lock/master/1.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/cmlocker/lock/master/2.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/cmlocker/lock/master/3.png">
@@ -24,13 +34,18 @@
 <meta property="og:image" content="https://raw.githubusercontent.com/cmlocker/lock/master/5.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/cmlocker/lock/master/6.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/cmlocker/lock/master/7.png">
-<meta property="og:updated_time" content="2016-08-01T14:36:48.000Z">
+<meta property="og:updated_time" content="2016-08-02T11:57:40.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="CMLocker">
-<meta name="twitter:description" content="缓存详解
+<meta name="twitter:description" content="目录 (Table of Contents)
+[TOC]
+缓存详解
 编写: gubaozhen整理: fangjie 
 
-缓存的概念凡是位于速度相差较大的两种硬件之间，用于协调两者数据传输速度差异的结构，均可称之为缓存（Cache）。因为内存相对于硬盘读写速度更快，内存可以作为硬盘的缓存；同样的，硬盘读写速度远高于网络数据的读写速度，也可以将硬盘作为网络数据的缓存。在内存和硬盘之间，硬盘与网络之间，都存在某种意义上的Cache。表现上，缓存载体与被缓存载">
+1. 缓存相关概念缓存
+凡是位于速度相差较大的两种硬件之间，用于协调两者数据传输速度差异的结构，均可称之为缓存（Cache）。
+
+因为内存相对于硬盘读写速度更快，内存可以作为硬盘的缓存；同样的，硬盘读写速度远高于网络数据的读写速度，也可以将硬盘作为网络数据的缓存。在内存和硬盘之">
 <meta name="twitter:image" content="https://raw.githubusercontent.com/cmlocker/lock/master/1.png">
   
     <link rel="alternate" href="/atom.xml" title="CMLocker" type="application/atom+xml">
@@ -75,7 +90,7 @@
         
           <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
         
-        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+        <a id="nav-search-btn" class="nav-icon" title="Zoeken"></a>
       </nav>
       <div id="search-form-wrap">
         <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://cmlocker.github.io"></form>
@@ -96,83 +111,90 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="缓存详解"><a href="#缓存详解" class="headerlink" title="缓存详解"></a>缓存详解</h1><blockquote>
+        <p><strong>目录 (Table of Contents)</strong></p>
+<p>[TOC]</p>
+<h1 id="缓存详解"><a href="#缓存详解" class="headerlink" title="缓存详解"></a>缓存详解</h1><blockquote>
 <p>编写: <a href="https://github.com/cmlocker" target="_blank" rel="external">gubaozhen</a><br>整理: <a href="https://github.com/cmlocker" target="_blank" rel="external">fangjie</a> </p>
 </blockquote>
-<h2 id="缓存的概念"><a href="#缓存的概念" class="headerlink" title="缓存的概念"></a>缓存的概念</h2><p>凡是位于速度相差较大的两种硬件之间，用于协调两者数据传输速度差异<br>的结构，均可称之为缓存（Cache）。<br>因为内存相对于硬盘读写速度更快，内存可以作为硬盘的缓存；同样的，硬盘读写速度远高于网络数据的读写速度，也可以将硬盘作为网络数据的缓存。在内存和硬盘之间，硬盘与网络之间，都存在某种意义上的Cache。<br>表现上，缓存载体与被缓存载体总是相对的，缓存设备成本高于被缓存设备，缓存设备速度高于被缓存设备，缓存设备容量远远小于被缓存设备。<br>缓存可以认为是数据的池子，是存储频繁使用的数据的临时的地方，缓存可以认为是原始数据的子集，它是从原始数据里复制出来的，并且为了能被取回，被加上了标志。</p>
+<h2 id="1-缓存相关概念"><a href="#1-缓存相关概念" class="headerlink" title="1. 缓存相关概念"></a>1. 缓存相关概念</h2><h3 id="缓存"><a href="#缓存" class="headerlink" title="缓存"></a>缓存</h3><blockquote>
+<p>凡是位于速度相差较大的两种硬件之间，用于协调两者数据传输速度差异的结构，均可称之为<strong>缓存（Cache）</strong>。</p>
+</blockquote>
+<p>因为内存相对于硬盘读写速度更快，内存可以作为硬盘的缓存；同样的，硬盘读写速度远高于网络数据的读写速度，也可以将硬盘作为网络数据的缓存。在内存和硬盘之间，硬盘与网络之间，都存在某种意义上的Cache。<br>表现上，缓存载体与被缓存载体总是相对的，缓存设备成本高于被缓存设备，缓存设备速度高于被缓存设备，缓存设备容量远远小于被缓存设备。<br>缓存可以认为是数据的池子，是存储频繁使用的数据的临时的地方，缓存可以认为是原始数据的子集，它是从原始数据里复制出来的，并且为了能被取回，被加上了标志。</p>
 <p><img src="https://raw.githubusercontent.com/cmlocker/lock/master/1.png" alt=""></p>
-<h3 id="命中与回源的概念："><a href="#命中与回源的概念：" class="headerlink" title="命中与回源的概念："></a>命中与回源的概念：</h3><p>当用户发起一个请求，我们的应用接受这个请求，并且如果是在第一次检查缓存的时候，需要去数据库读取产品信息。如果在缓存中，一个条目通过一个标记被找到了，这个条目就会被使用、我们就叫它缓存命中。<br>如果没有命中缓存，就需要从原始地址获取，这个步骤叫做“回源”。回源的代价是高昂的，只有尽可能减少回源才能更好的发挥缓存的作用，但受限于缓存设备的成本，不能仅仅增加缓<br>存容量，只能在成本和回源率之间寻求一个平衡点。</p>
-<h3 id="Cache-Miss："><a href="#Cache-Miss：" class="headerlink" title="Cache Miss："></a>Cache Miss：</h3><ol>
-<li>如果还有缓存的空间，那么，没有命中的对象会被存储到缓存中来。</li>
-<li>如果缓存满了，而又没有命中缓存，那么就会按照某一种策略，把缓存中的旧对象踢出，而把新的对象加入缓存池。而这些策略统称为替代策略（缓存算法），这些策略会决定到底应该踢出哪些对象。</li>
-</ol>
-<h3 id="存储成本："><a href="#存储成本：" class="headerlink" title="存储成本："></a>存储成本：</h3><p>当没有命中时，我们会从数据库取出数据，然后放入缓存。而把这个数据放入缓存所需要的时间和空间，就是存储成本。</p>
-<h3 id="失效："><a href="#失效：" class="headerlink" title="失效："></a>失效：</h3><p>当存在缓存中的数据需要更新时，就意味着缓存中的这个数据失效了。</p>
-<h3 id="缓存算法："><a href="#缓存算法：" class="headerlink" title="缓存算法："></a>缓存算法：</h3><p>介于缓存只能够有限的使用内存，任何Cache系统都需要一个如何淘汰缓存的方案（缓存淘汰算法，等同于页面置换算法）。我们要根据自己的业务需要来选择使用何种算法来淘汰多余的数据，提高命中率。</p>
-<h2 id="常用的缓存算法"><a href="#常用的缓存算法" class="headerlink" title="常用的缓存算法"></a>常用的缓存算法</h2><h3 id="Least-Frequently-Used（LFU）："><a href="#Least-Frequently-Used（LFU）：" class="headerlink" title="Least Frequently Used（LFU）："></a>Least Frequently Used（LFU）：</h3><p>根据数据的历史访问频率来淘汰数据，其核心思想是“如果数据过去被访问多次，那么将来被访问的频率也更高”。</p>
-<h3 id="Least-Recently-User（LRU）："><a href="#Least-Recently-User（LRU）：" class="headerlink" title="Least Recently User（LRU）："></a>Least Recently User（LRU）：</h3><p>根据数据的历史访问记录来进行淘汰数据，其核心思想是“如果数据最近被访问过，那么将来被访问的几率也更高”。</p>
-<h3 id="Least-Recently-Used-K（LRU-K）："><a href="#Least-Recently-Used-K（LRU-K）：" class="headerlink" title="Least Recently Used K（LRU-K）："></a>Least Recently Used K（LRU-K）：</h3><p>LRU-K中的K代表最近使用的次数，因此LRU可以认为是LRU-1。大多数情况下，LRU算法对热点数据命中率是很高的。 但如果突然大量偶发性的数据访问，会让内存中存放大量冷数据，也即是缓存污染。LRU-K的主要目的是为了解决LRU算法“缓存污染”的问题，其核心思想是将“最近使用过1次”的判断标准扩展为“最近使用过K次”。</p>
-<h3 id="First-in-First-out（FIFO）："><a href="#First-in-First-out（FIFO）：" class="headerlink" title="First in First out（FIFO）："></a>First in First out（FIFO）：</h3><p>最先进入的数据，最先被淘汰。一个很简单的算法。只要使用队列数据结构即可实现。那么FIFO淘汰算法基于的思想是”最近刚访问的，将来访问的可能性比较大”。</p>
-<h3 id="Two-Queues（2Q）："><a href="#Two-Queues（2Q）：" class="headerlink" title="Two Queues（2Q）："></a>Two Queues（2Q）：</h3><p>同样也是为了解决LRU算法的缓存污染问题。类似于LRU-2，不同点在于2Q将LRU-2算法中的访问历史队列改为一个FIFO缓存队列，即：2Q算法有两个缓存队列，一个是FIFO队列，一个是LRU队列。</p>
-<h3 id="Adaptive-Replacement-Cache（ARC）："><a href="#Adaptive-Replacement-Cache（ARC）：" class="headerlink" title="Adaptive Replacement Cache（ARC）："></a>Adaptive Replacement Cache（ARC）：</h3><p>ARC缓存替换算法是IBM两位科学家在《Arc: A Self-tuning, Low Overhead Replacement Cache》这篇论文中提出的。<br>ARC中维护两个LRU页队列：L1和L2。其中L1中保存了那些最近只被访问了一次的页，而L2中保存了最近至少被访问了两次的页。由于L1中存储的是最近访问的页，而L2中存放的是最近频繁被访问的页，因此我们可以说L1捕获“最近”，而L2捕获最“频繁”。<br>ARC目前被认为是性能最好的缓存算法之一，能够自调，并且是低负载的，相对于普通的LRU、LFU算法命中率也更高。</p>
-<h2 id="LFU："><a href="#LFU：" class="headerlink" title="LFU："></a>LFU：</h2><p>LFU的每个数据块都有一个引用计数，所有数据块按照引用计数排序，具有相同引用计数的数据块则按照时间排序。</p>
-<p>具体实现如下：</p>
-<p><img src="https://raw.githubusercontent.com/cmlocker/lock/master/2.png" alt=""></p>
-<ol>
+<h3 id="命中与回源"><a href="#命中与回源" class="headerlink" title="命中与回源"></a>命中与回源</h3><p>当用户发起一个请求，我们的应用接受这个请求，并且如果是在第一次检查缓存的时候，需要去数据库读取产品信息。如果在缓存中，一个条目通过一个标记被找到了，这个条目就会被使用、我们就叫它<strong>缓存命中</strong>。<br>如果没有命中缓存，就需要从原始地址获取，这个步骤叫做“回源”。回源的代价是高昂的，只有尽可能减少回源才能更好的发挥缓存的作用，但受限于缓存设备的成本，不能仅仅增加缓存容量，只能在成本和回源率之间寻求一个平衡点。</p>
+<h3 id="缓存未命中-Cache-Miss"><a href="#缓存未命中-Cache-Miss" class="headerlink" title="缓存未命中(Cache Miss)"></a>缓存未命中(Cache Miss)</h3><p>如果还有缓存的空间，那么，没有命中的对象会被存储到缓存中来。<br>如果缓存满了，而又没有命中缓存，那么就会按照某一种策略，把缓存中的旧对象踢出，而把新的对象加入缓存池。而这些策略统称为替代策略（缓存算法），这些策略会决定到底应该踢出哪些对象。</p>
+<h3 id="存储成本"><a href="#存储成本" class="headerlink" title="存储成本"></a>存储成本</h3><p>当没有命中时，我们会从数据库取出数据，然后放入缓存。而把这个数据放入缓存所需要的时间和空间，就是存储成本。</p>
+<h3 id="失效"><a href="#失效" class="headerlink" title="失效"></a>失效</h3><p>当存在缓存中的数据需要更新时，就意味着缓存中的这个数据失效了。</p>
+<h2 id="2-缓存算法"><a href="#2-缓存算法" class="headerlink" title="2. 缓存算法"></a>2. 缓存算法</h2><p>介于缓存只能够有限的使用内存，任何Cache系统都需要一个如何淘汰缓存的方案（缓存淘汰算法，等同于页面置换算法）。我们要根据自己的业务需要来选择使用何种算法来淘汰多余的数据，提高命中率。<br><strong>常用的缓存算法有</strong>：</p>
+<h3 id="LFU-Least-Frequently-Used"><a href="#LFU-Least-Frequently-Used" class="headerlink" title="LFU(Least Frequently Used)"></a>LFU(Least Frequently Used)</h3><blockquote>
+<p>根据数据的历史访问频率来淘汰数据，其核心思想是“如果数据过去被访问多次，那么将来被访问的频率也更高”。</p>
+<h4 id="1-LFU"><a href="#1-LFU" class="headerlink" title="1. LFU"></a>1. LFU</h4><p>LFU的每个数据块都有一个引用计数，所有数据块按照引用计数排序，具有相同引用计数的数据块则按照时间排序。<br>具体实现如下：<br><img src="https://raw.githubusercontent.com/cmlocker/lock/master/2.png" alt=""></p>
+</blockquote>
+<ul>
 <li>新加入数据插入到队列尾部（因为引用计数为1）；</li>
 <li>队列中的数据被访问后，引用计数增加，队列重新排序；</li>
-<li>当需要淘汰数据时，将已经排序的列表最后的数据块删除。</li>
-</ol>
-<h3 id="2-Window-LFU："><a href="#2-Window-LFU：" class="headerlink" title="2.Window-LFU："></a>2.Window-LFU：</h3><p>Windows-LFU是LFU的一个改进版，差别在于Window-LFU并不记录所有数据的访问历史，而只是记录过去一段时间内的访问历史，这就是Window的由来，基于这个原因，传统的LFU又被称为<br>“Perfect-LFU”。<br>与LFU的实现基本相同，差别在于不需要记录所有数据的历史访问数据，而只记录过去一段时间内的访问历史。具体实现如下：</p>
-<p><img src="https://raw.githubusercontent.com/cmlocker/lock/master/3.png" alt=""></p>
-<p>1）记录了过去W个访问记录；<br>2）需要淘汰时，将W个访问记录按照LFU规则排序淘汰</p>
-<p>举例如下：<br>假设历史访问记录长度设为9，缓存大小为3，图中不同颜色代表针对不同数据块的访问，同一颜色代表针对同一数据的多次访问。<br>样例1：黄色访问3次，蓝色和橘色都是两次，橘色更新，因此缓存黄色、橘色、蓝色三个数据块<br>样例2：绿色访问3次，蓝色两次，暗红两次，蓝色更新，因此缓存绿色、蓝色、暗红三个数据块</p>
+<li><p>当需要淘汰数据时，将已经排序的列表最后的数据块删除。</p>
+<h4 id="2-Window-LFU"><a href="#2-Window-LFU" class="headerlink" title="2. Window-LFU"></a>2. Window-LFU</h4><p>Windows-LFU是LFU的一个改进版，差别在于Window-LFU并不记录所有数据的访问历史，而只是记录过去一段时间内的访问历史，这就是Window的由来，基于这个原因，传统的LFU又被称为“Perfect-LFU”。<br>与LFU的实现基本相同，差别在于不需要记录所有数据的历史访问数据，而只记录过去一段时间内的访问历史。具体实现如下：<br><img src="https://raw.githubusercontent.com/cmlocker/lock/master/3.png" alt=""></p>
+</li>
+<li><p>记录了过去W个访问记录</p>
+</li>
+<li>需要淘汰时，将W个访问记录按照LFU规则排序淘汰<br>举例如下：<br>假设历史访问记录长度设为9，缓存大小为3，图中不同颜色代表针对不同数据块的访问，同一颜色代表针对同一数据的多次访问。<br>样例1：黄色访问3次，蓝色和橘色都是两次，橘色更新，因此缓存黄色、橘色、蓝色三个数据块<br>样例2：绿色访问3次，蓝色两次，暗红两次，蓝色更新，因此缓存绿色、蓝色、暗红三个数据块</li>
+</ul>
 <p><img src="https://raw.githubusercontent.com/cmlocker/lock/master/4.png" alt=""></p>
-<h3 id="LRU"><a href="#LRU" class="headerlink" title="LRU:"></a>LRU:</h3><p>1.LRU：最常见的实现是使用一个链表保存缓存数据，详细算法实现如下：</p>
-<p><img src="https://raw.githubusercontent.com/cmlocker/lock/master/5.png" alt=""></p>
+<h3 id="LRU（Least-Recently-User）"><a href="#LRU（Least-Recently-User）" class="headerlink" title="LRU（Least Recently User）"></a>LRU（Least Recently User）</h3><blockquote>
+<p>根据数据的历史访问记录来进行淘汰数据，其核心思想是“如果数据最近被访问过，那么将来被访问的几率也更高”。</p>
+<h4 id="1-LRU"><a href="#1-LRU" class="headerlink" title="1.LRU"></a>1.LRU</h4><p>最常见的实现是使用一个链表保存缓存数据，详细算法实现如下：<br><img src="https://raw.githubusercontent.com/cmlocker/lock/master/5.png" alt=""></p>
+</blockquote>
 <ul>
 <li>新数据插入到链表头部；</li>
 <li>每当缓存命中（即缓存数据被访问），则将数据移到链表头部；</li>
-<li>当链表满的时候，将链表尾部的数据丢弃。</li>
+<li>当链表满的时候，将链表尾部的数据丢弃。<br>当存在热点数据时，LRU的效率很好，但偶发性的、周期性的批量操作会导致LRU命中率急剧下降，缓存污染情况比较严重。</li>
 </ul>
-<p>当存在热点数据时，LRU的效率很好，但偶发性的、周期性的批量操作会导致LRU命中率急剧下降，缓存污染情况比较严重。</p>
-<h3 id="LRU-K："><a href="#LRU-K：" class="headerlink" title="LRU-K："></a>LRU-K：</h3><p>相比LRU，LRU-K需要多维护一个队列，用于记录所有缓存数据被访问的历史。只有当数据的<br>访问次数达到K次的时候，才将数据放入缓存。当需要淘汰数据时，LRU-K会淘汰第K次访问<br>时间距当前时间最大的数据。详细实现如下：</p>
+<h4 id="2-LRU-K-Least-Recently-Used-K"><a href="#2-LRU-K-Least-Recently-Used-K" class="headerlink" title="2.LRU-K(Least Recently Used K)"></a>2.LRU-K(Least Recently Used K)</h4><p>相比LRU，LRU-K需要多维护一个队列，用于记录所有缓存数据被访问的历史。只有当数据的访问次数达到K次的时候，才将数据放入缓存。当需要淘汰数据时，LRU-K会淘汰第K次访问时间距当前时间最大的数据。详细实现如下：</p>
 <p><img src="https://raw.githubusercontent.com/cmlocker/lock/master/6.png" alt=""></p>
-<ol>
+<ul>
 <li>数据第一次被访问，加入到访问历史列表；</li>
 <li>如果数据在访问历史列表里后没有达到K次访问，则按照一定规则（FIFO，LRU）淘汰；</li>
 <li>当访问历史队列中的数据访问次数达到K次后，将数据索引从历史队列删除，将数据移到缓存队列中，并缓存此数据，缓存队列重新按照时间排序；</li>
 <li>缓存数据队列中被再次访问后，重新排序；</li>
 <li>需要淘汰数据时，淘汰缓存队列中排在末尾的数据，即：淘汰“倒数第K次访问离现在最久”的数据。</li>
-</ol>
+</ul>
+<blockquote>
+<p>LRU-K中的K代表最近使用的次数，因此LRU可以认为是LRU-1。大多数情况下，LRU算法对热点数据命中率是很高的。 但如果突然大量偶发性的数据访问，会让内存中存放大量冷数据，也即是缓存污染。LRU-K的主要目的是为了解决LRU算法“缓存污染”的问题，其核心思想是将“最近使用过1次”的判断标准扩展为“最近使用过K次”。</p>
+</blockquote>
 <p>LRU-K具有LRU的优点，同时能够避免LRU的缺点，实际应用中LRU-2是综合各种因素后最优的选择，LRU-3或者更大的K值命中率会高，但适应性差，需要大量的数据访问才能将历史访问记录清除掉。</p>
-<h3 id="Two-queues（2Q）："><a href="#Two-queues（2Q）：" class="headerlink" title="Two queues（2Q）："></a>Two queues（2Q）：</h3><p>当数据第一次访问时，2Q算法将数据缓存在FIFO队列里面，当数据第二次被访问时，则将数据从FIFO队列移到LRU队列里面，两个队列各自按照自己的方法淘汰数据。详细实现如下：</p>
+<h3 id="FIFO-First-in-First-out"><a href="#FIFO-First-in-First-out" class="headerlink" title="FIFO(First in First out)"></a>FIFO(First in First out)</h3><p>最先进入的数据，最先被淘汰。一个很简单的算法。只要使用队列数据结构即可实现。那么FIFO淘汰算法基于的思想是”最近刚访问的，将来访问的可能性比较大”。</p>
+<h3 id="2Q-Two-Queues"><a href="#2Q-Two-Queues" class="headerlink" title="2Q(Two Queues)"></a>2Q(Two Queues)</h3><p>同样也是为了解决LRU算法的缓存污染问题。类似于LRU-2，不同点在于2Q将LRU-2算法中的访问历史队列改为一个FIFO缓存队列，即：2Q算法有两个缓存队列，一个是FIFO队列，一个是LRU队列。<br>当数据第一次访问时，2Q算法将数据缓存在FIFO队列里面，当数据第二次被访问时，则将数据从FIFO队列移到LRU队列里面，两个队列各自按照自己的方法淘汰数据。详细实现如下：</p>
 <p><img src="https://raw.githubusercontent.com/cmlocker/lock/master/7.png" alt=""></p>
-<ol>
+<ul>
 <li>新访问的数据插入到FIFO队列；</li>
 <li>如果数据在FIFO队列中一直没有被再次访问，则最终按照FIFO规则淘汰；</li>
 <li>如果数据在FIFO队列中被再次访问，则将数据移到LRU队列头部；</li>
 <li>如果数据在LRU队列再次被访问，则将数据移到LRU队列头部；</li>
 <li>LRU队列淘汰末尾的数据。</li>
-</ol>
+</ul>
 <blockquote>
 <p> 注：上图中FIFO队列比LRU队列短，但并不代表这是算法要求，实际应用中两者比例没有硬性规定。</p>
 </blockquote>
+<h3 id="Adaptive-Replacement-Cache-ARC"><a href="#Adaptive-Replacement-Cache-ARC" class="headerlink" title="Adaptive Replacement Cache(ARC)"></a>Adaptive Replacement Cache(ARC)</h3><p>ARC缓存替换算法是IBM两位科学家在《Arc: A Self-tuning, Low Overhead Replacement Cache》这篇论文中提出的。ARC中维护两个LRU页队列：L1和L2。其中L1中保存了那些最近只被访问了一次的页，而L2中保存了最近至少被访问了两次的页。由于L1中存储的是最近访问的页，而L2中存放的是最近频繁被访问的页，因此我们可以说L1捕获“最近”，而L2捕获最“频繁”。ARC目前被认为是性能最好的缓存算法之一，能够自调，并且是低负载的，相对于普通的LRU、LFU算法命中率也更高。</p>
+<blockquote>
 <p>ARC: adaptive replacement cache(IBM), adjusted replacement cache(ZFS)</p>
+</blockquote>
 <ul>
 <li>一种自适应，低成本的淘汰算法</li>
 <li>它集合了LRU和LFU的优点，并且没有额外的使用和实现成本。</li>
 <li>它可以根据workload的改变而自动改变淘汰策略。</li>
 </ul>
-<p>在一些文件系统缓存中实现的标准的LRU淘汰算法是有一些缺点的。例如，它们对扫描读模<br>式是没有抵抗性的。当一次顺序读取大量的数据块时，这些数据块就会填满整个缓存空间，<br>即使它们只是被读一次。当缓存空间满了之后，你如果想向缓存放入新的数据，那些最近最<br>少被使用的页面将会被淘汰出去。在这种大量顺序读的情况下，我们的缓存将会只包含这些<br>新读的数据，而不是那些真正被经常使用的数据。在这些顺序读出的数据仅仅只被使用一次<br>的情况下，从缓存的角度来看，它将被这些无用的数据填满。</p>
-<p>另外一个挑战是：一个缓存可以根据时间进行优化（缓存那些最近使用的页面），也可以根据<br>频率进行优化（缓存那些最频繁使用的页面）。但是这两种方法都不能适应所有的workload。<br>而一个好的缓存设计是能自动根据workload来调整它的优化策略。</p>
+<p>在一些文件系统缓存中实现的标准的LRU淘汰算法是有一些缺点的。例如，它们对扫描读模式是没有抵抗性的。当一次顺序读取大量的数据块时，这些数据块就会填满整个缓存空间，即使它们只是被读一次。当缓存空间满了之后，你如果想向缓存放入新的数据，那些最近最少被使用的页面将会被淘汰出去。在这种大量顺序读的情况下，我们的缓存将会只包含这些新读的数据，而不是那些真正被经常使用的数据。在这些顺序读出的数据仅仅只被使用一次<br>的情况下，从缓存的角度来看，它将被这些无用的数据填满。<br>另外一个挑战是：一个缓存可以根据时间进行优化（缓存那些最近使用的页面），也可以根据频率进行优化（缓存那些最频繁使用的页面）。但是这两种方法都不能适应所有的workload。而一个好的缓存设计是能自动根据workload来调整它的优化策略。</p>
+<blockquote>
 <p>ARC算法则解决了上述问题。以下为ARC算法的基本原理:<br><a href="https://pthree.org/2012/12/07/zfs-administration-part-iv-the-adjustable-replacement-cache/" target="_blank" rel="external">https://pthree.org/2012/12/07/zfs-administration-part-iv-the-adjustable-replacement-cache/</a></p>
 <p>ZFS的扩展实现中的源码:<br><a href="https://github.com/zfsonlinux/zfs/blob/master/module/zfs/arc.c" target="_blank" rel="external">https://github.com/zfsonlinux/zfs/blob/master/module/zfs/arc.c</a></p>
+</blockquote>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://cmlocker.github.io/2016/08/01/cache/" data-id="circ52nn10001puvf19qrw30m" class="article-share-link">Share</a>
+      <a data-url="http://cmlocker.github.io/2016/08/01/cache/" data-id="cirdev4iu0001xyvfdz444n51" class="article-share-link">Delen</a>
       
       
     </footer>
@@ -183,7 +205,7 @@
   
   
     <a href="/2016/07/25/hello-world/" id="article-nav-older" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Older</strong>
+      <strong class="article-nav-caption">Ouder</strong>
       <div class="article-nav-title">Hello World</div>
     </a>
   
@@ -226,7 +248,7 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Archives</h3>
+    <h3 class="widget-title">Archieven</h3>
     <div class="widget">
       <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">August 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">July 2016</a></li></ul>
     </div>
@@ -236,7 +258,7 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Recent Posts</h3>
+    <h3 class="widget-title">Recente berichten</h3>
     <div class="widget">
       <ul>
         
