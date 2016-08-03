@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://cmlocker.github.io/"/>
-  <updated>2016-08-03T13:01:44.000Z</updated>
+  <updated>2016-08-03T13:15:35.000Z</updated>
   <id>http://cmlocker.github.io/</id>
   
   <author>
@@ -20,7 +20,7 @@
     <link href="http://cmlocker.github.io/2016/08/01/cache/"/>
     <id>http://cmlocker.github.io/2016/08/01/cache/</id>
     <published>2016-08-01T07:29:27.000Z</published>
-    <updated>2016-08-03T13:01:44.000Z</updated>
+    <updated>2016-08-03T13:15:35.000Z</updated>
     
     <content type="html"><![CDATA[<h1 id="缓存详解"><a href="#缓存详解" class="headerlink" title="缓存详解"></a>缓存详解</h1><blockquote>
 <p>编写: <a href="https://github.com/cmlocker" target="_blank" rel="external">gubaozhen</a><br>整理: <a href="https://github.com/cmlocker" target="_blank" rel="external">fangjie</a> </p>
@@ -93,11 +93,7 @@
 <li>它集合了LRU和LFU的优点，并且没有额外的使用和实现成本。</li>
 <li>它可以根据workload的改变而自动改变淘汰策略。</li>
 </ul>
-<p>在一些文件系统缓存中实现的标准的LRU淘汰算法是有一些缺点的<br>例如:它们对扫描读模式是没有抵抗性的。当一次顺序读取大量的数据块时，这些数据块<br>就会填满整个缓存空间，即使它们只是被读一次。</p>
-<p>当缓存空间满了之后你如果想向缓存放<br>入新的数据<br>那些最近最少被使用的页面将会被淘出去在这种大量顺序读的情况下</p>
-<p>我们的缓存将会只包含这些<br>新读的数据，而不是那些真正被经常使用的数据</p>
-<p>在这些顺序读出的数据仅仅只被使用一次<br>的情况下，从缓存的角度来看，它将被这些无用的数据填满</p>
-<p>一个缓存可以根据时间进行优化<strong>（缓存那些最近使用的页面）</strong>也可以根据<br>频率进行优化<strong>（缓存那些最频繁使用的页面）</strong> 但是这两种方法都不能适应所有的workload。<br>而一个好的缓存设计是能自动根据workload来调整它的优化策略。</p>
+<p>在一些文件系统缓存中实现的标准的LRU淘汰算法是有一些缺点的<br>例如:它们对扫描读模式是没有抵抗性的。当一次顺序读取大量的数据块时，这些数据块<br>就会填满整个缓存空间，即使它们只是被读一次。当缓存空间满了之后你如果想向缓存放入新的数据,那些最近最少被使用的页面将会被淘出去在这种大量顺序读的情况下我们的缓存将会只包含这些新读的数据，而不是那些真正被经常使用的数据在这些顺序读出的数据仅仅只被使用一次<br>的情况下，从缓存的角度来看，它将被这些无用的数据填满<br>一个缓存可以根据时间进行优化<strong>（缓存那些最近使用的页面）</strong>也可以根据频率进行优化<strong>（缓存那些最频繁使用的页面）</strong> 但是这两种方法都不能适应所有的workload。<br>而一个好的缓存设计是能自动根据workload来调整它的优化策略。</p>
 <blockquote>
 <p>ARC算法则解决了上述问题。以下为ARC算法的基本原理:<br><a href="https://pthree.org/2012/12/07/zfs-administration-part-iv-the-adjustable-replacement-cache/" target="_blank" rel="external">https://pthree.org/2012/12/07/zfs-administration-part-iv-the-adjustable-replacement-cache/</a></p>
 <p>ZFS的扩展实现中的源码:<br><a href="https://github.com/zfsonlinux/zfs/blob/master/module/zfs/arc.c" target="_blank" rel="external">https://github.com/zfsonlinux/zfs/blob/master/module/zfs/arc.c</a>.</p>
@@ -117,7 +113,7 @@
     </summary>
     
     
-      <category term="cache" scheme="http://cmlocker.github.io/tags/cache/"/>
+      <category term="缓存详解" scheme="http://cmlocker.github.io/tags/%E7%BC%93%E5%AD%98%E8%AF%A6%E8%A7%A3/"/>
     
   </entry>
   
