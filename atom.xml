@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://cmlocker.github.io/"/>
-  <updated>2016-08-03T13:15:35.000Z</updated>
+  <updated>2016-08-23T12:39:45.000Z</updated>
   <id>http://cmlocker.github.io/</id>
   
   <author>
@@ -14,6 +14,56 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Android 直接渲染本地二进制文件探究</title>
+    <link href="http://cmlocker.github.io/2016/08/23/resources/"/>
+    <id>http://cmlocker.github.io/2016/08/23/resources/</id>
+    <published>2016-08-22T16:00:00.000Z</published>
+    <updated>2016-08-23T12:39:45.000Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="Android-直接渲染本地二进制文件探究"><a href="#Android-直接渲染本地二进制文件探究" class="headerlink" title="Android 直接渲染本地二进制文件探究"></a>Android 直接渲染本地二进制文件探究</h1><blockquote>
+<p>编写: <a href="https://github.com/cmlocker" target="_blank" rel="external">gubaozhen</a>  </p>
+</blockquote>
+<h2 id="1-实现目标"><a href="#1-实现目标" class="headerlink" title="1. 实现目标"></a>1. 实现目标</h2><p><strong>1.用户将android工程中未经编译的assets、res文件夹拷贝至设备SD卡中,即可通过预览工具预览资源文件中配置的layout布局及动画.</strong><br><img src="https://raw.githubusercontent.com/cmlocker/lock/master/yulangongju1.png" alt=""></p>
+<p><strong>2.需要解决的技术点</strong><br>    将明文的xml文件转成编译后的二进制文件<br>    解决方案:改写aapt源码编译成一个提权后可以在非root手机上运行的二进制文件,从而实现手机端打包</p>
+<pre><code>当将二进制xml加载进来后,凡是涉及到外部引用的属性我们得到的只是一串ID,要根据这个ID找到正确的对应的值
+</code></pre><p><img src="https://raw.githubusercontent.com/cmlocker/lock/master/yulangongju2.png" alt=""><br><a id="more"></a></p>
+<h2 id="2-解决方案"><a href="#2-解决方案" class="headerlink" title="2. 解决方案"></a>2. 解决方案</h2><h3 id="android-apk打包流程"><a href="#android-apk打包流程" class="headerlink" title="android apk打包流程:"></a>android apk打包流程:</h3><p><img src="https://raw.githubusercontent.com/cmlocker/lock/master/yulangongju5.png" alt=""></p>
+<p>1、打包资源文件，生成R.java文件<br>2、处理aidl文件，生成相应java 文件<br>3、编译工程源代码，生成相应class 文件<br>4、转换所有class文件，生成classes.dex文件<br>5、打包生成apk<br>6、对apk文件进行签名<br>7、对签名后的apk文件进行对其处理</p>
+<h3 id="理解android资源编译打包及查找机制"><a href="#理解android资源编译打包及查找机制" class="headerlink" title="理解android资源编译打包及查找机制:"></a>理解android资源编译打包及查找机制:</h3><p>一个工程经过编译打包之后其values目录下的所有文件以及R.java都会被压到resources.arsc文件中,我们需要解析这个文件<br><img src="https://raw.githubusercontent.com/cmlocker/lock/master/yulangongju3.png" alt=""></p>
+<p>打开resources.arsc会看到这样的内容(截取部分):<br><img src="https://raw.githubusercontent.com/cmlocker/lock/master/yulangongju4.png" alt=""></p>
+<h3 id="解析"><a href="#解析" class="headerlink" title="解析:"></a>解析:</h3><p>对应结构:<br><a href="http://blog.csdn.net/luoshengyang/article/details/8744683" target="_blank" rel="external">http://blog.csdn.net/luoshengyang/article/details/8744683</a></p>
+<p>AAPT打包过程中会赋予每一个非assets资源一个ID值，这些ID值以常量的形式定义在一个R.java文件中。<br>将所有XML元素的标签、属性名称、属性值和内容所涉及到的字符串及18个维度的配置信息压缩到resources.arsc文件中，此文件用来描述那些具有ID值的资源的配置信息，它的内容就相当于是一个资源索引表。</p>
+<p>通过文档读懂resources.arsc的结构后，自己去手写一个解析方案的成本无疑是巨大的。android本身的解析方案是写在native层的,难以复用。</p>
+<p>目标转换到ApkTool工具上。<br>ApkTool是一个常用的反编译工具，其代码开源在<a href="https://github.com/iBotPeaches/Apktool" target="_blank" rel="external">https://github.com/iBotPeaches/Apktool</a></p>
+<p>反编译APK必然要涉及到解析其中的资源文件,所以去研究ApkTool的源码后发现,其核心代码是用java写的,虽然并没有专门针对android平台,但是当我们改掉其中的apache引用包和一些不合适的api后可以移植到android上使用。</p>
+<p>于是抽出并改写其中的resources.arsc解析逻辑后,我们便可以拿到对应的资源了。</p>
+<p>在拿到资源表后，还要解决资源匹配的问题，android资源具有18个维度的配置:<br>见表2:<br><a href="http://developer.android.com/intl/zh-cn/guide/topics/resources/providing-resources.html#DensityQualifier" target="_blank" rel="external">http://developer.android.com/intl/zh-cn/guide/topics/resources/providing-resources.html#DensityQualifier</a></p>
+<p>当通过一个ID去加载资源时要根据当前手机配置去决定加载哪个维度的资源,资源匹配规则总结如下:</p>
+<p>   1.清除包含任何与手机配置有冲突的属性的资源文件夹,dpi相关、screen size不在范围内<br>   2.选择手机配置中最高优先级的属性<br>   3.有包含上述属性的文件夹吗？ 如果没有，跳转步骤２，选择下一优先级高的属性；如果有，继续步骤４<br>   4.清除不包含此属性的所有文件夹<br>   5.重复步骤２和３，直到步骤４中只剩下一个文件夹则返回</p>
+<p>通过以上方法我们已经可以拿到所有资源,并且通过ID和当前手机配置信息去找到合适的资源去加载。</p>
+<p>接下来要去修正inflate出来的view以及动画中错误的属性值。<br>自定义view可以在其构造方法中解决。</p>
+<p>系统view如RelativeLayout、ImageView等等需要去重写LayoutInflater类中相关的方法。</p>
+<p>Animator则通过分析其对应的XmlResourceParser与AttributeSet的对应关系来解决。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;Android-直接渲染本地二进制文件探究&quot;&gt;&lt;a href=&quot;#Android-直接渲染本地二进制文件探究&quot; class=&quot;headerlink&quot; title=&quot;Android 直接渲染本地二进制文件探究&quot;&gt;&lt;/a&gt;Android 直接渲染本地二进制文件探究&lt;/h1&gt;&lt;blockquote&gt;
+&lt;p&gt;编写: &lt;a href=&quot;https://github.com/cmlocker&quot;&gt;gubaozhen&lt;/a&gt;  &lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&quot;1-实现目标&quot;&gt;&lt;a href=&quot;#1-实现目标&quot; class=&quot;headerlink&quot; title=&quot;1. 实现目标&quot;&gt;&lt;/a&gt;1. 实现目标&lt;/h2&gt;&lt;p&gt;&lt;strong&gt;1.用户将android工程中未经编译的assets、res文件夹拷贝至设备SD卡中,即可通过预览工具预览资源文件中配置的layout布局及动画.&lt;/strong&gt;&lt;br&gt;&lt;img src=&quot;https://raw.githubusercontent.com/cmlocker/lock/master/yulangongju1.png&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;2.需要解决的技术点&lt;/strong&gt;&lt;br&gt;    将明文的xml文件转成编译后的二进制文件&lt;br&gt;    解决方案:改写aapt源码编译成一个提权后可以在非root手机上运行的二进制文件,从而实现手机端打包&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;当将二进制xml加载进来后,凡是涉及到外部引用的属性我们得到的只是一串ID,要根据这个ID找到正确的对应的值
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src=&quot;https://raw.githubusercontent.com/cmlocker/lock/master/yulangongju2.png&quot; alt=&quot;&quot;&gt;&lt;br&gt;
+    
+    </summary>
+    
+    
+      <category term="Android 直接渲染本地二进制文件探究" scheme="http://cmlocker.github.io/tags/Android-%E7%9B%B4%E6%8E%A5%E6%B8%B2%E6%9F%93%E6%9C%AC%E5%9C%B0%E4%BA%8C%E8%BF%9B%E5%88%B6%E6%96%87%E4%BB%B6%E6%8E%A2%E7%A9%B6/"/>
+    
+  </entry>
   
   <entry>
     <title>缓存详解</title>

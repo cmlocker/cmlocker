@@ -1,0 +1,39 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><meta name="description"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Android 直接渲染本地二进制文件探究 · CMLocker</title><link rel="short icon" href="/favicon.ico"><!-- font--><link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Sans+Pro:400,600|Roboto Mono"><!-- icon--><link rel="stylesheet" href="/fonts/iconfont/iconfont.css"><!-- theme style--><link rel="stylesheet" href="/css/style.css"><!-- baidu analytics--><script type="text/javascript">var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?54cc7f45c065f277e3d76c663fe6fbcd";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script></head><body><div id="main"><header><a href="/." class="logo">CMLocker</a><ul class="nav"><li class="nav-link"><a href="/" target="_self">Accueil</a></li><li class="nav-link"><a href="/archives/" target="_self">Archives</a></li><li class="nav-link"><a href="/tags/" target="_self">Tags</a></li><li class="nav-link"><a href="/about/" target="_self">À propos</a></li></ul></header><section id="container"><article class="post"><h1 class="post-title">Android 直接渲染本地二进制文件探究</h1><span class="post-time">Aug 23, 2016</span><div id="sidebar" class="post-sidebar"><h3 class="heading">Sommaire</h3><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Android-直接渲染本地二进制文件探究"><span class="toc-text">Android 直接渲染本地二进制文件探究</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-实现目标"><span class="toc-text">1. 实现目标</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-解决方案"><span class="toc-text">2. 解决方案</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#android-apk打包流程"><span class="toc-text">android apk打包流程:</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#理解android资源编译打包及查找机制"><span class="toc-text">理解android资源编译打包及查找机制:</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#解析"><span class="toc-text">解析:</span></a></li></ol></li></ol></li></ol></div><div class="post-content"><h1 id="Android-直接渲染本地二进制文件探究"><a href="#Android-直接渲染本地二进制文件探究" class="headerlink" title="Android 直接渲染本地二进制文件探究"></a>Android 直接渲染本地二进制文件探究</h1><blockquote>
+<p>编写: <a href="https://github.com/cmlocker" target="_blank" rel="external">gubaozhen</a>  </p>
+</blockquote>
+<h2 id="1-实现目标"><a href="#1-实现目标" class="headerlink" title="1. 实现目标"></a>1. 实现目标</h2><p><strong>1.用户将android工程中未经编译的assets、res文件夹拷贝至设备SD卡中,即可通过预览工具预览资源文件中配置的layout布局及动画.</strong><br><img src="https://raw.githubusercontent.com/cmlocker/lock/master/yulangongju1.png" alt=""></p>
+<p><strong>2.需要解决的技术点</strong><br>    将明文的xml文件转成编译后的二进制文件<br>    解决方案:改写aapt源码编译成一个提权后可以在非root手机上运行的二进制文件,从而实现手机端打包</p>
+<pre><code>当将二进制xml加载进来后,凡是涉及到外部引用的属性我们得到的只是一串ID,要根据这个ID找到正确的对应的值
+</code></pre><p><img src="https://raw.githubusercontent.com/cmlocker/lock/master/yulangongju2.png" alt=""><br><a id="more"></a></p>
+<h2 id="2-解决方案"><a href="#2-解决方案" class="headerlink" title="2. 解决方案"></a>2. 解决方案</h2><h3 id="android-apk打包流程"><a href="#android-apk打包流程" class="headerlink" title="android apk打包流程:"></a>android apk打包流程:</h3><p><img src="https://raw.githubusercontent.com/cmlocker/lock/master/yulangongju5.png" alt=""></p>
+<p>1、打包资源文件，生成R.java文件<br>2、处理aidl文件，生成相应java 文件<br>3、编译工程源代码，生成相应class 文件<br>4、转换所有class文件，生成classes.dex文件<br>5、打包生成apk<br>6、对apk文件进行签名<br>7、对签名后的apk文件进行对其处理</p>
+<h3 id="理解android资源编译打包及查找机制"><a href="#理解android资源编译打包及查找机制" class="headerlink" title="理解android资源编译打包及查找机制:"></a>理解android资源编译打包及查找机制:</h3><p>一个工程经过编译打包之后其values目录下的所有文件以及R.java都会被压到resources.arsc文件中,我们需要解析这个文件<br><img src="https://raw.githubusercontent.com/cmlocker/lock/master/yulangongju3.png" alt=""></p>
+<p>打开resources.arsc会看到这样的内容(截取部分):<br><img src="https://raw.githubusercontent.com/cmlocker/lock/master/yulangongju4.png" alt=""></p>
+<h3 id="解析"><a href="#解析" class="headerlink" title="解析:"></a>解析:</h3><p>对应结构:<br><a href="http://blog.csdn.net/luoshengyang/article/details/8744683" target="_blank" rel="external">http://blog.csdn.net/luoshengyang/article/details/8744683</a></p>
+<p>AAPT打包过程中会赋予每一个非assets资源一个ID值，这些ID值以常量的形式定义在一个R.java文件中。<br>将所有XML元素的标签、属性名称、属性值和内容所涉及到的字符串及18个维度的配置信息压缩到resources.arsc文件中，此文件用来描述那些具有ID值的资源的配置信息，它的内容就相当于是一个资源索引表。</p>
+<p>通过文档读懂resources.arsc的结构后，自己去手写一个解析方案的成本无疑是巨大的。android本身的解析方案是写在native层的,难以复用。</p>
+<p>目标转换到ApkTool工具上。<br>ApkTool是一个常用的反编译工具，其代码开源在<a href="https://github.com/iBotPeaches/Apktool" target="_blank" rel="external">https://github.com/iBotPeaches/Apktool</a></p>
+<p>反编译APK必然要涉及到解析其中的资源文件,所以去研究ApkTool的源码后发现,其核心代码是用java写的,虽然并没有专门针对android平台,但是当我们改掉其中的apache引用包和一些不合适的api后可以移植到android上使用。</p>
+<p>于是抽出并改写其中的resources.arsc解析逻辑后,我们便可以拿到对应的资源了。</p>
+<p>在拿到资源表后，还要解决资源匹配的问题，android资源具有18个维度的配置:<br>见表2:<br><a href="http://developer.android.com/intl/zh-cn/guide/topics/resources/providing-resources.html#DensityQualifier" target="_blank" rel="external">http://developer.android.com/intl/zh-cn/guide/topics/resources/providing-resources.html#DensityQualifier</a></p>
+<p>当通过一个ID去加载资源时要根据当前手机配置去决定加载哪个维度的资源,资源匹配规则总结如下:</p>
+<p>   1.清除包含任何与手机配置有冲突的属性的资源文件夹,dpi相关、screen size不在范围内<br>   2.选择手机配置中最高优先级的属性<br>   3.有包含上述属性的文件夹吗？ 如果没有，跳转步骤２，选择下一优先级高的属性；如果有，继续步骤４<br>   4.清除不包含此属性的所有文件夹<br>   5.重复步骤２和３，直到步骤４中只剩下一个文件夹则返回</p>
+<p>通过以上方法我们已经可以拿到所有资源,并且通过ID和当前手机配置信息去找到合适的资源去加载。</p>
+<p>接下来要去修正inflate出来的view以及动画中错误的属性值。<br>自定义view可以在其构造方法中解决。</p>
+<p>系统view如RelativeLayout、ImageView等等需要去重写LayoutInflater类中相关的方法。</p>
+<p>Animator则通过分析其对应的XmlResourceParser与AttributeSet的对应关系来解决。</p>
+</div></article><div class="tags"><a href="/tags/Android-直接渲染本地二进制文件探究/">Android 直接渲染本地二进制文件探究</a></div><div class="paginator"><a href="/2016/08/01/cache/" class="next"><span>Suivant</span><i class="iconfont icon-right"></i></a></div><section id="comments"><div data-thread-key="http://cmlocker.github.io/2016/08/23/resources/index.html" data-title="Android 直接渲染本地二进制文件探究" data-url="http://cmlocker.github.io/2016/08/23/resources/index.html" class="ds-thread"></div><script type="text/javascript">var duoshuoQuery = {short_name: "cmlocker" };
+(function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
+})();</script></section></section><footer><div class="copyright"><p>&copy;2013-2016<span class="heart"><i class="iconfont icon-heart"></i></span><span class="author">CMLocker</span></p><p class="theme">Theme by <a href="https://github.com/ahonn/hexo-theme-even"> Even</a></p></div><label id="back2top"><i class="iconfont icon-up"></i></label></footer></div></body><script src="/js/zepto.min.js"></script><script src="/js/theme.js"></script></html>
